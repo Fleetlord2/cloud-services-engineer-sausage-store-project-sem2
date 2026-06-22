@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sausage-backend-report
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicas }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  strategy:
+    type: {{ .Values.strategy.type }}
+  selector:
+    matchLabels:
+      app: sausage-backend-report
+  template:
+    metadata:
+      labels:
+        app: sausage-backend-report
+    spec:
+      containers:
+        - name: backend-report
+          image: {{ .Values.image }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-report-config
+                  key: PORT
+            - name: DB
+              valueFrom:
+                secretKeyRef:
+                  name: backend-report-secret
+                  key: DB
+          resources:
+            requests:
+              memory: {{ .Values.resources.requests.memory }}
+              cpu: {{ .Values.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+              cpu: {{ .Values.resources.limits.cpu }}
