@@ -38,10 +38,21 @@ spec:
             - name: http
               containerPort: {{ .Values.containerPort }}
           env:
+            - name: SPRING_CLOUD_VAULT_ENABLED
+              value: {{ .Values.vault.enabled | quote }}
+            {{- if eq .Values.vault.enabled "true" }}
+            - name: SPRING_CLOUD_VAULT_HOST
+              value: {{ .Values.vault.host | quote }}
+            - name: SPRING_CLOUD_VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: sausage-store-backend-secret
+                  key: vault_token
+            {{- end }}
             - name: SPRING_DATASOURCE_URL
               valueFrom:
                 configMapKeyRef:
-                  name: {{ .Release.Name }}-{{ .Chart.Name }}-conf
+                  name: sausage-store-backend-conf
                   key: postgres_uri
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:

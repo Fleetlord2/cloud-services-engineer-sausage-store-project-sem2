@@ -34,6 +34,10 @@ backend:
     path: /actuator/prometheus
     port: "8080"
     scrape: "true"
+  vault:
+    enabled: "false"
+    host: ""
+    token: ""
   env:
     postgresUri: jdbc:postgresql://postgresql:5432/sausage-store
     postgresUser: store
