@@ -34,6 +34,22 @@ backend:
     path: /actuator/prometheus
     port: "8080"
     scrape: "true"
+  livenessProbe:
+    httpGet:
+      path: /actuator/health
+      port: 8080
+    initialDelaySeconds: 60
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /actuator/health
+      port: 8080
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
   vault:
     enabled: "false"
     host: ""
@@ -64,14 +80,6 @@ backend:
       memory: "256Mi"
       cpu: "500m"
   containerPort: 8080
-  livenessProbe:
-    httpGet:
-      path: /actuator/health
-      port: 8080
-    initialDelaySeconds: 60
-    periodSeconds: 15
-    timeoutSeconds: 5
-    failureThreshold: 3
   vpa:
     enabled: true
     updateMode: "Off"
