@@ -122,16 +122,20 @@ infra:
         memory: "512Mi"
         cpu: "500m"
   mongodb:
-    image: mongo:6-jammy
+    image: mongo:7.0
     env:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    reports:
+      database: sausage-store
+      user: reports
+      password: reportspassword
     containerPort: 27017
     storage: 1Gi
     resources:
       requests:
+        cpu: "200m"
         memory: "256Mi"
-        cpu: "100m"
       limits:
-        memory: "512Mi"
-        cpu: "500m"
+        cpu: "200m"
+        memory: "256Mi"
